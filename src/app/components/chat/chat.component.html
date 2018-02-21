@@ -9,6 +9,10 @@
           <a href="#" mat-raised-button (click)="quickReply($event, 'Yes')">Yes</a>
           <a href="#" mat-raised-button (click)="quickReply($event, 'No')">No</a>
         </ng-container>
+        <ng-container *ngIf="message.quickReply == 'ft-pt'">
+          <a href="#" mat-raised-button (click)="quickReply($event, 'Full-time')">Full-time</a>
+          <a href="#" mat-raised-button (click)="quickReply($event, 'Part-time')">Part-time</a>
+        </ng-container>
       </p>
     </mat-list-item>
   </mat-list>
@@ -19,7 +23,7 @@
            #message
            maxlength="256"
            placeholder="Message"
-           (keyup.enter)="addMessageFromUser(message)">
+           (keyup.enter)="addMessageFromUser(message)" autocomplete="off">
     <mat-icon matSuffix (click)="addMessageFromUser(message)">send</mat-icon>
   </mat-form-field>
 </form>

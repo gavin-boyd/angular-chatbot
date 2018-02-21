@@ -42,7 +42,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       result.result.fulfillment['messages'].forEach(message => {
         var botSpeak = message.speech;
         var quickReply;
-        if (botSpeak == "Would you like to continue?") {
+        if (botSpeak === "Would you like to continue?") {
           quickReply = 'yes-no';
         }
         this.conversation.push({
@@ -67,14 +67,17 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       content: message.value
     });
     this.dialogFlowAPIReq(message.value).then(result => {
-      console.log(result);
-      var action = result.result;
-      //var messages = result.result.fulfillment['messages'] || 'I can\'t seem to figure that out!';
+      var botSpeak = message.speech;
+      var quickReply;
+      if (botSpeak === "Do you want to study Full-time or Part-time?") {
+        quickReply = 'ft-pt';
+      }
       result.result.fulfillment['messages'].forEach(message => {
         this.conversation.push({
           avatar: this.avatar,
           from: this.botName,
-          content: message.speech
+          content: botSpeak,
+          quickReply: quickReply
         });
       });
       message.value = '';
