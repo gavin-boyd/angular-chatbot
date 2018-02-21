@@ -5,11 +5,11 @@
       <h3 matLine></h3>
       <p matLine>
         <span>{{ message.content }}</span>
-        <ng-container *ngIf="message.quickReply == 'yes-no'">
+        <ng-container *ngIf="message.quickreply == 'yes-no'">
           <a href="#" mat-raised-button (click)="quickReply($event, 'Yes')">Yes</a>
           <a href="#" mat-raised-button (click)="quickReply($event, 'No')">No</a>
         </ng-container>
-        <ng-container *ngIf="message.quickReply == 'ft-pt'">
+        <ng-container *ngIf="message.quickreply == 'ft-pt'">
           <a href="#" mat-raised-button (click)="quickReply($event, 'Full-time')">Full-time</a>
           <a href="#" mat-raised-button (click)="quickReply($event, 'Part-time')">Part-time</a>
         </ng-container>

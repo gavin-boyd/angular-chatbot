@@ -41,15 +41,17 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       console.log(result);
       result.result.fulfillment['messages'].forEach(message => {
         var botSpeak = message.speech;
-        var quickReply;
+        var quickReplyType = 'no';
         if (botSpeak === "Would you like to continue?") {
-          quickReply = 'yes-no';
+          quickReplyType = 'yes-no';
         }
+        console.log('-- Q: ' + botSpeak);
+        console.log('Quick Reply: ' + quickReplyType);
         this.conversation.push({
           avatar: this.avatar,
           from: this.botName,
           content: botSpeak,
-          quickReply: quickReply
+          quickreply: quickReplyType
         });
       });
     });
@@ -67,17 +69,19 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       content: message.value
     });
     this.dialogFlowAPIReq(message.value).then(result => {
-      var botSpeak = message.speech;
-      var quickReply;
-      if (botSpeak === "Do you want to study Full-time or Part-time?") {
-        quickReply = 'ft-pt';
-      }
       result.result.fulfillment['messages'].forEach(message => {
+        var botSpeak = message.speech;
+        var quickReplyType = 'no';
+        if (botSpeak === "Do you want to study Full-time or Part-time?") {
+          quickReplyType = 'ft-pt';
+        }
+        console.log('-- Q: ' + botSpeak);
+        console.log('Quick Reply: ' + quickReplyType);
         this.conversation.push({
           avatar: this.avatar,
           from: this.botName,
           content: botSpeak,
-          quickReply: quickReply
+          quickreply: quickReplyType
         });
       });
       message.value = '';
@@ -87,7 +91,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   //display a quick reply options
   quickReply(event: any, message) {
     event.preventDefault();
-    console.log(message);
     this.dialogFlowAPIReq(message).then(result => {
       var action = result.result;
       this.conversation.push({
