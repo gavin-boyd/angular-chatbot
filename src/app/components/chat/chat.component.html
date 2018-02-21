@@ -1,0 +1,25 @@
+<div class="window" #scrollMe>
+  <mat-list>
+    <mat-list-item *ngFor="let message of conversation">
+      <mat-icon></mat-icon>
+      <h3 matLine></h3>
+      <p matLine>
+        <span>{{ message.content }}</span>
+        <ng-container *ngIf="message.quickReply == 'yes-no'">
+          <a href="#" mat-raised-button (click)="quickReply($event, 'Yes')">Yes</a>
+          <a href="#" mat-raised-button (click)="quickReply($event, 'No')">No</a>
+        </ng-container>
+      </p>
+    </mat-list-item>
+  </mat-list>
+</div>
+<form class="example-form">
+  <mat-form-field class="example-full-width">
+    <input matInput
+           #message
+           maxlength="256"
+           placeholder="Message"
+           (keyup.enter)="addMessageFromUser(message)">
+    <mat-icon matSuffix (click)="addMessageFromUser(message)">send</mat-icon>
+  </mat-form-field>
+</form>

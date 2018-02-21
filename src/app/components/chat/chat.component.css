@@ -1,0 +1,36 @@
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+.window
+{
+  height: 500px;
+  padding-bottom: 60px;
+  overflow-y: scroll;
+  position: relative;
+}
+
+mat-list {
+  height:100%;
+}
+
+mat-icon {
+    color: purple;
+    cursor: pointer;
+}
+
+form {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    padding: 10px;
+    border-top:5px solid #eee;
+}
