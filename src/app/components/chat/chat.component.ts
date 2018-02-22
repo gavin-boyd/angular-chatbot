@@ -34,15 +34,16 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   //welcome messages from dialogflow
   ngOnInit(): void {
-    this.quickReplyArray = [];
-
     this.dialogFlowAPIReq(this.firstQuestion).then(result => {
       console.log(result);
       result.result.fulfillment['messages'].forEach(message => {
         var quickreply = 'no';
         var botSpeak = message.speech;
         if (botSpeak === 'Would you like to continue?') {
-          quickreply = 'yes-no';
+          this.quickReplyArray = [{
+            '0': 'Yes',
+            '1': 'No'
+          }];
         }
         this.conversationArray.push({
           avatar: this.avatar,
@@ -68,6 +69,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       content: message.value
     });
     this.dialogFlowAPIReq(message.value).then(result => {
+      console.log(result);
       this.quickReplyArray = [];
       //quick replies
       if (result.result.fulfillment['data']) {
@@ -82,8 +84,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         this.conversationArray.push({
           avatar: this.avatar,
           from: this.botName,
-          content: botSpeak,
-          replyArray: this.quickReplyArray
+          content: botSpeak
         });
       });
       message.value = '';
@@ -93,12 +94,25 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   //display a quick reply options
   quickReply(event: any, message) {
     event.preventDefault();
+    this.quickReplyArray = [];
     this.dialogFlowAPIReq(message).then(result => {
-      var action = result.result;
-      this.conversationArray.push({
-        avatar: this.avatar,
-        from: this.botName,
-        content: result.result.fulfillment['speech'] || 'I can\'t seem to figure that out!'
+      console.log(result);
+      this.quickReplyArray = [];
+      //quick replies
+      if (result.result.fulfillment['data']) {
+        result.result.fulfillment['data'].forEach(value => {
+          console.log(value);
+          this.quickReplyArray.push(value);
+        });
+      }
+      //messages
+      result.result.fulfillment['messages'].forEach(message => {
+        var botSpeak = message.speech;
+        this.conversationArray.push({
+          avatar: this.avatar,
+          from: this.botName,
+          content: botSpeak
+        });
       });
     });
   }
