@@ -13,10 +13,11 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   client = new ApiAiClient({accessToken: '95dc8bb0e8784a29ba589105c6516542'});
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
-  //conversation: IMessage[] = [];
-  conversation: any = [];
+  quickReplyArray: any = [];
+  conversationArray: any = [];
   avatar: string = 'android';
   botName: string = 'Jeff';
+  firstQuestion: string = 'Hi';
 
   //always scroll to the bottom of the chat window
   scrollToBottom(): void {
@@ -31,57 +32,58 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     return req;
   }
 
+  //welcome messages from dialogflow
   ngOnInit(): void {
-    //debug
-    //console.log('start chat');
-    //console.log(this.client);
+    this.quickReplyArray = [];
 
-    //welcome messages from dialogflow
-    this.dialogFlowAPIReq('Hi').then(result => {
+    this.dialogFlowAPIReq(this.firstQuestion).then(result => {
       console.log(result);
       result.result.fulfillment['messages'].forEach(message => {
+        var quickreply = 'no';
         var botSpeak = message.speech;
-        var quickReplyType = 'no';
-        if (botSpeak === "Would you like to continue?") {
-          quickReplyType = 'yes-no';
+        if (botSpeak === 'Would you like to continue?') {
+          quickreply = 'yes-no';
         }
-        console.log('-- Q: ' + botSpeak);
-        console.log('Quick Reply: ' + quickReplyType);
-        this.conversation.push({
+        this.conversationArray.push({
           avatar: this.avatar,
           from: this.botName,
           content: botSpeak,
-          quickreply: quickReplyType
+          quickreply: quickreply
         });
       });
     });
     this.scrollToBottom();
   }
 
+  //scroll to view
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
 
+  //responses function
   addMessageFromUser(message) {
-    this.conversation.push({
+    this.conversationArray.push({
       avatar: 'perm_identity',
       from: 'Me',
       content: message.value
     });
     this.dialogFlowAPIReq(message.value).then(result => {
+      this.quickReplyArray = [];
+      //quick replies
+      if (result.result.fulfillment['data']) {
+        result.result.fulfillment['data'].forEach(value => {
+          console.log(value);
+          this.quickReplyArray.push(value);
+        });
+      }
+      //messages
       result.result.fulfillment['messages'].forEach(message => {
         var botSpeak = message.speech;
-        var quickReplyType = 'no';
-        if (botSpeak === "Do you want to study Full-time or Part-time?") {
-          quickReplyType = 'ft-pt';
-        }
-        console.log('-- Q: ' + botSpeak);
-        console.log('Quick Reply: ' + quickReplyType);
-        this.conversation.push({
+        this.conversationArray.push({
           avatar: this.avatar,
           from: this.botName,
           content: botSpeak,
-          quickreply: quickReplyType
+          replyArray: this.quickReplyArray
         });
       });
       message.value = '';
@@ -93,11 +95,16 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     event.preventDefault();
     this.dialogFlowAPIReq(message).then(result => {
       var action = result.result;
-      this.conversation.push({
+      this.conversationArray.push({
         avatar: this.avatar,
         from: this.botName,
         content: result.result.fulfillment['speech'] || 'I can\'t seem to figure that out!'
       });
     });
+  }
+
+  //https://stackoverflow.com/questions/39059552/how-to-iterate-through-an-object-attributes-in-angular-2
+  generateArray(obj){
+    return Object.keys(obj).map((key)=>{ return obj[key]});
   }
 }

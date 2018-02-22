@@ -1,10 +1,10 @@
 <div class="window" #scrollMe>
   <mat-list>
-    <mat-list-item *ngFor="let message of conversation">
+    <mat-list-item *ngFor="let message of conversationArray">
       <mat-icon></mat-icon>
       <h3 matLine></h3>
       <p matLine>
-        <span>{{ message.content }}</span>
+        <span [innerHTML]="message.content"></span>
         <ng-container *ngIf="message.quickreply == 'yes-no'">
           <a href="#" mat-raised-button (click)="quickReply($event, 'Yes')">Yes</a>
           <a href="#" mat-raised-button (click)="quickReply($event, 'No')">No</a>
@@ -12,6 +12,11 @@
         <ng-container *ngIf="message.quickreply == 'ft-pt'">
           <a href="#" mat-raised-button (click)="quickReply($event, 'Full-time')">Full-time</a>
           <a href="#" mat-raised-button (click)="quickReply($event, 'Part-time')">Part-time</a>
+        </ng-container>
+        <ng-container *ngFor="let reply of message.replyArray">
+          <ng-container *ngFor="let objArrayElement of generateArray(reply)">
+            <a href="#" mat-raised-button (click)="quickReply($event, objArrayElement)">{{ objArrayElement }}</a>
+          </ng-container>
         </ng-container>
       </p>
     </mat-list-item>
