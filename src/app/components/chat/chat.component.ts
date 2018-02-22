@@ -114,6 +114,12 @@ export class ChatComponent implements OnInit, AfterViewChecked {
           content: botSpeak
         });
       });
+      /*var action = result.result;
+      this.conversationArray.push({
+        avatar: this.avatar,
+        from: this.botName,
+        content: result.result.fulfillment['speech'] || 'I can\'t seem to figure that out!'
+      });*/
     });
   }
 
