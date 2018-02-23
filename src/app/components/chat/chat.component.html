@@ -1,15 +1,18 @@
 <div class="window" #scrollMe>
   <mat-list>
     <mat-list-item *ngFor="let message of conversationArray">
-      <mat-icon></mat-icon>
-      <h3 matLine></h3>
+      <mat-icon><img src="{{ message.avatar }}" width="30" /></mat-icon>
+      <h3 matLine>{{ message.from }}</h3>
       <p matLine>
         <span [innerHTML]="message.content"></span>
       </p>
     </mat-list-item>
+    <mat-list-item *ngIf="typing == 'yes'">
+      Ulster University is typing <img src="https://cdn.dribbble.com/users/597268/screenshots/2991038/dribbble_2x.gif" width="80" alt="" />
+    </mat-list-item>
   </mat-list>
 </div>
-<form class="example-form">
+<form class="example-form" *ngIf="typing !== 'yes'">
   <ng-container *ngFor="let reply of quickReplyArray">
     <ng-container *ngFor="let objArrayElement of generateArray(reply)">
       <a href="#" mat-raised-button (click)="quickReply($event, objArrayElement)">{{ objArrayElement }}</a>
